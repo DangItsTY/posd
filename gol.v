@@ -257,10 +257,22 @@ Definition emptyboard := mk_board dead dead dead dead
                            dead dead dead dead
                            dead dead dead dead
                            dead dead dead dead.
+Definition fullboard := mk_board alive alive alive alive
+                                 alive alive alive alive
+                                 alive alive alive alive
+                                 alive alive alive alive.
 Definition all_cells := [C00; C01; C02; C03; C10; C11; C12; C13; C20; C21; C22; C23; C30; C31; C32; C33].
 Definition board1 := mk_board dead alive dead dead
                               dead dead dead dead
                               dead dead dead dead
+                              dead dead dead dead.
+Definition board2 := mk_board alive alive alive dead
+                              alive alive alive dead
+                              dead dead dead dead
+                              dead dead dead dead.
+Definition board3 := mk_board alive alive alive alive
+                              alive alive alive alive
+                              alive alive alive alive
                               dead dead dead dead.
 
 (* Play the game for "num" iterations *)
@@ -322,8 +334,54 @@ simpl.
 apply IHn.
 Qed.
 
-(* These were difficult proofs that were too complex for us *)
-Theorem full_by_3_board1 : forall (n:nat), n > 2 -> do_play_game board1 n = 
+Theorem fullboard_is_fullboard : forall n:nat, do_play_game fullboard n = fullboard.
+Proof.
+simpl.
+induction n.
+simpl.
+reflexivity.
+simpl.
+apply IHn.
+Qed.
+
+(* Note, these last few theorems are in relation to board1 to prove "fullboard-ness" *)
+Theorem board3_onestep_full : do_play_game board3 1 = fullboard.
+Proof.
+simpl.
+reflexivity.
+Qed.
+
+Theorem board2_twostep_full : do_play_game board2 2 = fullboard.
+Proof.
+simpl.
+reflexivity.
+Qed.
+
+Theorem board1_threestep_full : do_play_game board1 3 = fullboard.
+Proof.
+simpl.
+reflexivity.
+Qed.
+
+Theorem full_by_3_board1 : forall (n:nat), n > 2 -> do_play_game board1 n = fullboard.
+Proof.
+intros.
+induction n.
+inversion H.
+induction n.
+inversion H.
+inversion H1.
+induction n.
+inversion H.
+inversion H1.
+inversion H3.
+induction n.
+apply board1_threestep_full.
+apply fullboard_is_fullboard.
+Qed.
+
+(* These were other attempts at doing a "full by 3" proof *)
+Theorem full_by_3_board1' : forall (n:nat), n > 2 -> do_play_game board1 n = 
   mk_board alive alive alive alive
            alive alive alive alive
            alive alive alive alive
