@@ -265,6 +265,7 @@ Definition play_game (l: list cell) : board :=
 
 Compute play_game list10.
 
+(*
 Definition spread_rule (b: board) (c: cell) : board :=
   match (get b c) with
   | alive => b
@@ -287,7 +288,7 @@ Definition spread_rule (b: board) (c: cell) : board :=
                   | C33 => b33
                   end
   end.
-
+*)
 
 (*
 Definition num_neighbors (b: board) (c: cell) : nat :=
