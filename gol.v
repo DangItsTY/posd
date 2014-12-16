@@ -94,7 +94,7 @@ Definition get (b: board) (c: cell) : mark :=
       end
   end.
       
-Example cell_list := [C00; C01; C02; C03; C10; C11; C12; C13; C20; C21; C22; C23; C30; C31; C32; C33].
+Example all_cells := [C00; C01; C02; C03; C10; C11; C12; C13; C20; C21; C22; C23; C30; C31; C32; C33].
 
 Notation "x :: l" := (cons x l) (at level 60, right associativity).
 
@@ -119,40 +119,47 @@ Fixpoint beq_nat (n m : nat) : bool :=
             end
   end.
 
-Definition apply_rules (b: board) (c: cell) : board :=
-  match b with
+Definition apply_rules (b_old: board) (b_new: board) (c: cell) : board :=
+  match b_old with
   | mk_board b00 b01 b02 b03 b10 b11 b12 b13 b20 b21 b22 b23 b30 b31 b32 b33 => 
       match c with
-      | C00 => if( beq_nat (rec_num_nei b [C01; C10; C11] c) 0) then b else (place c alive b)
-      | C01 => if( beq_nat (rec_num_nei b [C00; C02; C10; C11; C12] c) 0) then b else (place c alive b)
-      | C02 => if( beq_nat (rec_num_nei b [C01; C03; C11; C12; C13] c) 0) then b else (place c alive b)
-      | C03 => if( beq_nat (rec_num_nei b [C02; C12; C13] c) 0) then b else (place c alive b)
-      | C10 => if( beq_nat (rec_num_nei b [C00; C01; C11; C20; C21] c) 0) then b else (place c alive b)
-      | C11 => if( beq_nat (rec_num_nei b [C00; C01; C02; C10; C12; C20; C21; C22] c) 0) then b else (place c alive b)
-      | C12 => if( beq_nat (rec_num_nei b [C01; C02; C03; C11; C13; C21; C22; C23] c) 0) then b else (place c alive b)
-      | C13 => if( beq_nat (rec_num_nei b [C02; C03; C12; C22; C23] c) 0) then b else (place c alive b)
-      | C20 => if( beq_nat (rec_num_nei b [C10; C11; C21; C30; C31] c) 0) then b else (place c alive b)
-      | C21 => if( beq_nat (rec_num_nei b [C10; C11; C12; C20; C22; C30; C31; C32] c) 0) then b else (place c alive b)
-      | C22 => if( beq_nat (rec_num_nei b [C11; C12; C13; C21; C23; C31; C32; C33] c) 0) then b else (place c alive b)
-      | C23 => if( beq_nat (rec_num_nei b [C12; C13; C22; C32; C33] c) 0) then b else (place c alive b)
-      | C30 => if( beq_nat (rec_num_nei b [C20; C21; C31]  c) 0) then b else (place c alive b)
-      | C31 => if( beq_nat (rec_num_nei b [C20; C21; C22; C30; C32] c) 0) then b else (place c alive b)
-      | C32 => if( beq_nat (rec_num_nei b [C21; C22; C23; C31; C33] c) 0) then b else (place c alive b)
-      | C33 => if( beq_nat (rec_num_nei b [C22; C23; C32] c) 0) then b else (place c alive b)
+      | C00 => if( beq_nat (rec_num_nei b_old [C01; C10; C11] c) 0) then b_new else (place c alive b_new)
+      | C01 => if( beq_nat (rec_num_nei b_old [C00; C02; C10; C11; C12] c) 0) then b_new else (place c alive b_new)
+      | C02 => if( beq_nat (rec_num_nei b_old [C01; C03; C11; C12; C13] c) 0) then b_new else (place c alive b_new)
+      | C03 => if( beq_nat (rec_num_nei b_old [C02; C12; C13] c) 0) then b_new else (place c alive b_new)
+      | C10 => if( beq_nat (rec_num_nei b_old [C00; C01; C11; C20; C21] c) 0) then b_new else (place c alive b_new)
+      | C11 => if( beq_nat (rec_num_nei b_old [C00; C01; C02; C10; C12; C20; C21; C22] c) 0) then b_new else (place c alive b_new)
+      | C12 => if( beq_nat (rec_num_nei b_old [C01; C02; C03; C11; C13; C21; C22; C23] c) 0) then b_new else (place c alive b_new)
+      | C13 => if( beq_nat (rec_num_nei b_old [C02; C03; C12; C22; C23] c) 0) then b_new else (place c alive b_new)
+      | C20 => if( beq_nat (rec_num_nei b_old [C10; C11; C21; C30; C31] c) 0) then b_new else (place c alive b_new)
+      | C21 => if( beq_nat (rec_num_nei b_old [C10; C11; C12; C20; C22; C30; C31; C32] c) 0) then b_new else (place c alive b_new)
+      | C22 => if( beq_nat (rec_num_nei b_old [C11; C12; C13; C21; C23; C31; C32; C33] c) 0) then b_new else (place c alive b_new)
+      | C23 => if( beq_nat (rec_num_nei b_old [C12; C13; C22; C32; C33] c) 0) then b_new else (place c alive b_new)
+      | C30 => if( beq_nat (rec_num_nei b_old [C20; C21; C31]  c) 0) then b_new else (place c alive b_new)
+      | C31 => if( beq_nat (rec_num_nei b_old [C20; C21; C22; C30; C32] c) 0) then b_new else (place c alive b_new)
+      | C32 => if( beq_nat (rec_num_nei b_old [C21; C22; C23; C31; C33] c) 0) then b_new else (place c alive b_new)
+      | C33 => if( beq_nat (rec_num_nei b_old [C22; C23; C32] c) 0) then b_new else (place c alive b_new)
       end
   end.
 
 Fixpoint update (b_old: board)(b_new: board)(c: list cell): board :=
   match c with
   | nil => b_new
-  | h :: t => update b_old (apply_rules b_old h) t
+  | h :: t => update b_old (apply_rules b_old b_new h) t
   end.
 
+Definition list10 := [C01].
+Compute initialize emptyboard list10.
+
+Compute update (initialize emptyboard list10) emptyboard all_cells.
+
+
+(*
 Definition spread_rule (b: board) (c: cell) : board :=
   match (get b c) with
   | alive => b
   | dead => match c with
-                  | C00 => get b c
+                  | C00 => if( beq_nat (rec_num_nei b [C01; C10; C11] c) 0) then b else (place c alive b)
                   | C01 => b01
                   | C02 => b02
                   | C03 => b03
@@ -170,6 +177,8 @@ Definition spread_rule (b: board) (c: cell) : board :=
                   | C33 => b33
             
   end.
+*)
+
 (*
 Definition num_neighbors (b: board) (c: cell) : nat :=
 match b with
